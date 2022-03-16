@@ -1,0 +1,48 @@
+span.error {
+  color: red;
+  font-size: 0.8em;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+#contenedor_carga {
+  background-color: #ededed;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 10000;
+}
+
+#carga {
+  border: 15px solid #ccc;
+  border-top-color: #007bff;
+  /*border-top-style: groove;*/
+  height: 100px;
+  width: 100px;
+  border-radius: 100%;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  -webkit-animation: girar 0.5s linear infinite;
+  -o-animation: girar 0.5s linear infinite;
+  animation: girar 0.5s linear infinite;
+}
+
+@keyframes girar {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
