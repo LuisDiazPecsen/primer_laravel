@@ -717,7 +717,9 @@
 
             let respuesta = await response.json();
 
-            // Código para mostrar resultado
+            $('#modal').modal('hide');
+            $cuerpoCard.innerHTML = '';
+
             const $divAlert = document.createElement('div');
             $divAlert.setAttribute('class',
                 'alert alertaResultado alert-dismissible fade show alert-success');
@@ -741,7 +743,40 @@
             $divAlert.appendChild($btnClose);
 
             // Listar elementos
-            getPage();
+            options = {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                        'content')
+                },
+            };
+
+            switch (tipo) {
+                case 'producto':
+                    response = await fetch("{{ route('producto.index') }}", options);
+                    break;
+                case 'marca':
+                    response = await fetch("{{ route('marca.index') }}", options);
+                    break;
+                case 'categoria':
+                    response = await fetch("{{ route('categoria.index') }}", options);
+                    break;
+                case 'unidadmedida':
+                    response = await fetch("{{ route('unidadmedida.index') }}", options);
+                    break;
+                default:
+                    break;
+            }
+
+            if (!response.ok) {
+                throw {
+                    status: response.status,
+                    statusText: response.statusText
+                };
+            }
+
+            respuesta = await response.json();
+            listarTable(respuesta);
 
             // Mostrar alerta de éxito o de error en POST
             document.getElementById('divAlerta').appendChild($divAlert);
@@ -749,6 +784,7 @@
                 $('.alertaResultado').alert('close');
             }, 3000);
 
+            removeLoading();
         } catch (error) {
             let code = error.status;
             let message = error.statusText || "Ocurrió un error";
@@ -760,8 +796,6 @@
     // Cuando se envía formulario, se ejecuta
     const submit = async function submit(element = null) {
         loading();
-        //console.log('Value:' + document.getElementById('txtDescripcion').value);
-        //console.log('Attribute: ' + document.getElementById('txtDescripcion').getAttribute('value'));
         let data = {
             txtCodigo: document.getElementById('txtCodigo').value,
             txtDescripcion: document.getElementById('txtDescripcion').value,
@@ -837,8 +871,6 @@
                 let respuesta = await response.json();
                 console.log(respuesta);
 
-                // Código para mostrar resultado
-                const $divAlert = document.createElement('div');
                 if (respuesta.status == '400') {
                     var summary = "";
                     for (const [clave, valor] of Object.entries(respuesta.errors)) {
@@ -866,6 +898,10 @@
                     document.getElementById('filaError').appendChild($errorDiv);
                     document.getElementById('listaErrores').innerHTML = summary;
                 } else {
+                    $('#modal').modal('hide');
+                    $cuerpoCard.innerHTML = '';
+
+                    const $divAlert = document.createElement('div');
                     $divAlert.setAttribute('class',
                         'alert alertaResultado alert-dismissible fade show alert-success');
                     $divAlert.setAttribute('role', 'alert');
@@ -887,10 +923,41 @@
                     $divAlert.appendChild($mensaje);
                     $divAlert.appendChild($btnClose);
 
-                    $('#modal').modal('hide');
-
                     // Listar elementos
-                    getPage();
+                    options = {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        },
+                    };
+
+                    switch (tipo) {
+                        case 'producto':
+                            response = await fetch("{{ route('producto.index') }}", options);
+                            break;
+                        case 'marca':
+                            response = await fetch("{{ route('marca.index') }}", options);
+                            break;
+                        case 'categoria':
+                            response = await fetch("{{ route('categoria.index') }}", options);
+                            break;
+                        case 'unidadmedida':
+                            response = await fetch("{{ route('unidadmedida.index') }}", options);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (!response.ok) {
+                        throw {
+                            status: response.status,
+                            statusText: response.statusText
+                        };
+                    }
+
+                    respuesta = await response.json();
+                    listarTable(respuesta);
 
                     // Mostrar alerta de éxito o de error en POST
                     document.getElementById('divAlerta').appendChild($divAlert);
@@ -903,6 +970,7 @@
                 let code = error.status;
                 let message = error.statusText || "Ocurrió un error";
                 $cuerpoCard.innerHTML = code + ' - ' + message + error;
+                console.log(error);
                 removeLoading();
             }
         } else {
@@ -952,8 +1020,6 @@
                 let respuesta = await response.json();
                 console.log(respuesta);
 
-                // Código para mostrar resultado
-                const $divAlert = document.createElement('div');
                 if (respuesta.status == '400') {
                     var summary = "";
                     for (const [clave, valor] of Object.entries(respuesta.errors)) {
@@ -983,6 +1049,10 @@
 
                     removeLoading();
                 } else if (respuesta.status == '404') {
+                    $('#modal').modal('hide');
+                    $cuerpoCard.innerHTML = '';
+
+                    const $divAlert = document.createElement('div');
                     $divAlert.setAttribute('class',
                         'alert alertaResultado alert-dismissible fade show alert-danger');
                     $divAlert.setAttribute('role', 'alert');
@@ -1004,17 +1074,52 @@
                     $divAlert.appendChild($mensaje);
                     $divAlert.appendChild($btnClose);
 
-                    $('#modal').modal('hide');
-
                     // Listar elementos
-                    getPage();
+                    options = {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        },
+                    };
 
-                    // Mostrar alerta de éxito o de error en POST
+                    switch (tipo) {
+                        case 'producto':
+                            response = await fetch("{{ route('producto.index') }}", options);
+                            break;
+                        case 'marca':
+                            response = await fetch("{{ route('marca.index') }}", options);
+                            break;
+                        case 'categoria':
+                            response = await fetch("{{ route('categoria.index') }}", options);
+                            break;
+                        case 'unidadmedida':
+                            response = await fetch("{{ route('unidadmedida.index') }}", options);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (!response.ok) {
+                        throw {
+                            status: response.status,
+                            statusText: response.statusText
+                        };
+                    }
+
+                    respuesta = await response.json();
+                    listarTable(respuesta);
+
+                    // Mostrar alerta de éxito o de error en PUT
                     document.getElementById('divAlerta').appendChild($divAlert);
                     setTimeout(() => {
                         $('.alertaResultado').alert('close');
                     }, 3000);
                 } else {
+                    $('#modal').modal('hide');
+                    $cuerpoCard.innerHTML = '';
+
+                    const $divAlert = document.createElement('div');
                     $divAlert.setAttribute('class',
                         'alert alertaResultado alert-dismissible fade show alert-success');
                     $divAlert.setAttribute('role', 'alert');
@@ -1036,12 +1141,43 @@
                     $divAlert.appendChild($mensaje);
                     $divAlert.appendChild($btnClose);
 
-                    $('#modal').modal('hide');
-
                     // Listar elementos
-                    getPage();
+                    options = {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        },
+                    };
 
-                    // Mostrar alerta de éxito o de error en POST
+                    switch (tipo) {
+                        case 'producto':
+                            response = await fetch("{{ route('producto.index') }}", options);
+                            break;
+                        case 'marca':
+                            response = await fetch("{{ route('marca.index') }}", options);
+                            break;
+                        case 'categoria':
+                            response = await fetch("{{ route('categoria.index') }}", options);
+                            break;
+                        case 'unidadmedida':
+                            response = await fetch("{{ route('unidadmedida.index') }}", options);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (!response.ok) {
+                        throw {
+                            status: response.status,
+                            statusText: response.statusText
+                        };
+                    }
+
+                    respuesta = await response.json();
+                    listarTable(respuesta);
+
+                    // Mostrar alerta de éxito o de error en PUT
                     document.getElementById('divAlerta').appendChild($divAlert);
                     setTimeout(() => {
                         $('.alertaResultado').alert('close');
