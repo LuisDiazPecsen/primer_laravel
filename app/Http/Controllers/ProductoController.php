@@ -98,10 +98,10 @@ class ProductoController extends Controller
             $producto = new Producto();
             $producto->codigo = 'P';
             $producto->descripcion = $request->input('txtDescripcion');
-            $producto->precio_compra = $request->input('txtPrecioCompra');
-            $producto->precio_venta = $request->input('txtPrecioVenta');
-            $producto->stock = $request->input('txtStock');
-            $producto->stock_minimo = $request->input('txtStock_minimo');
+            $producto->precio_compra = doubleval($request->input('txtPrecioCompra'));
+            $producto->precio_venta = doubleval($request->input('txtPrecioVenta'));
+            $producto->stock = doubleval($request->input('txtStock'));
+            $producto->stock_minimo = doubleval($request->input('txtStockMinimo'));
             $producto->marca_id = intval(substr(explode(' - ', $request->input('txtMarca'))[0], 1));
             $producto->unidad_medida_id = intval(substr(explode(' - ', $request->input('txtUnidadMedida'))[0], 1));
             $producto->categoria_id = intval(substr(explode(' - ', $request->input('txtCategoria'))[0], 1));
@@ -138,19 +138,16 @@ class ProductoController extends Controller
     {
         $producto = Producto::find($id);
         if ($producto) {
-            $producto->addSelect([
+            $foraneo = Producto::select([
                 'unidad_medida.codigo AS unidad_medida_codigo',
                 'unidad_medida.descripcion AS unidad_medida_descripcion',
                 'marca.codigo AS marca_codigo',
                 'marca.descripcion AS marca_descripcion',
                 'categoria.codigo AS categoria_codigo',
                 'categoria.descripcion AS categoria_descripcion'
-            ])
-                ->join('unidad_medida', 'producto.unidad_medida_id', '=', 'unidad_medida.id')
-                ->join('marca', 'producto.marca_id', '=', 'marca.id')
-                ->join('categoria', 'producto.categoria_id', '=', 'categoria.id')->get();
+            ])->join('unidad_medida', 'producto.unidad_medida_id', '=', 'unidad_medida.id')->join('marca', 'producto.marca_id', '=', 'marca.id')->join('categoria', 'producto.categoria_id', '=', 'categoria.id')->where('producto.id', '=', $producto->id)->get();
 
-            $viewEditProductoRender = view('producto.edit', compact('producto'))->render();
+            $viewEditProductoRender = view('producto.edit', ['producto' => $producto, 'foraneo' => $foraneo[0]])->render();
 
             return response()->json(array('html' => $viewEditProductoRender));
         } else {
@@ -206,10 +203,10 @@ class ProductoController extends Controller
             $producto = Producto::find($id);
             if ($producto) {
                 $producto->descripcion = $request->input('txtDescripcion');
-                $producto->precio_compra = $request->input('txtPrecioCompra');
-                $producto->precio_venta = $request->input('txtPrecioVenta');
-                $producto->stock = $request->input('txtStock');
-                $producto->stock_minimo = $request->input('txtStock_minimo');
+                $producto->precio_compra = doubleval($request->input('txtPrecioCompra'));
+                $producto->precio_venta = doubleval($request->input('txtPrecioVenta'));
+                $producto->stock = doubleval($request->input('txtStock'));
+                $producto->stock_minimo = doubleval($request->input('txtStockMinimo'));
                 $producto->marca_id = intval(substr(explode(' - ', $request->input('txtMarca'))[0], 1));
                 $producto->unidad_medida_id = intval(substr(explode(' - ', $request->input('txtUnidadMedida'))[0], 1));
                 $producto->categoria_id = intval(substr(explode(' - ', $request->input('txtCategoria'))[0], 1));

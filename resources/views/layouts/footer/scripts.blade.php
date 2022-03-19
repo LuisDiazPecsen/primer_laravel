@@ -136,6 +136,9 @@
                         $td.setAttribute('value', valor);
                         $td.innerHTML = elemento.categoria_descripcion;
                         break;
+                    case 'unidad_medida_id':
+                    case 'marca_id':
+                    case 'categoria_id':
                     case 'unidad_medida_descripcion':
                     case 'marca_descripcion':
                     case 'categoria_descripcion':
@@ -189,6 +192,8 @@
         // Agregar filas en el cuerpo de tabla
         document.getElementById('tbody').appendChild($fragment);
 
+        console.log(tipo);
+        console.log(document.getElementById('producto_table'));
         // DataTables:
         let $tabla = $('#' + tipo + '_table').DataTable({
             responsive: true,
@@ -603,6 +608,9 @@
             document.getElementById('btnAceptar').addEventListener('click', function() {
                 submit();
             });
+            if (tipo == 'producto') {
+                autocompleteSearchBars();
+            }
         } catch (error) {
             document.getElementById('formularioContenedor').innerHTML = "Se produjo un error";
             document.getElementById("modalTitulo").innerHTML = "Error";
@@ -659,6 +667,9 @@
             document.getElementById('btnAceptar').addEventListener('click', function() {
                 submit(this);
             });
+            if (tipo == 'producto') {
+                autocompleteSearchBars();
+            }
         } catch (error) {
             document.getElementById('formularioContenedor').innerHTML = "Se produjo un error";
             document.getElementById("modalTitulo").innerHTML = "Error";
@@ -1198,69 +1209,63 @@
         const $txtUnidadMedida = document.getElementById('txtUnidadMedida');
         $txtUnidadMedida.addEventListener('keyup', function() {
             let descripcionUnidadMedida = this.value;
-            if (descripcionUnidadMedida != '') {
-                //console.log(descripcionUnidadMedida);
+            let url = "{{ route('unidadmedida.search', ':keywords') }}";
+            url = url.replace(':keywords', descripcionUnidadMedida);
+            if (this.value != '') {
                 $.ajax({
-                    url: '/primer_proyecto/unidadmedida/searchUnidadMedida',
-                    method: 'POST',
-                    data: {
-                        descripcionUnidadMedida
-                    },
-                    success: function(data) {
-                        //console.log(data);
+                    url: url,
+                    method: 'GET',
+                    success: function(respuesta) {
                         const $unidadMedidaList = document.getElementById(
                             'unidadMedidaList');
                         $unidadMedidaList.hidden = false;
-                        $unidadMedidaList.innerHTML = data;
+                        $unidadMedidaList.innerHTML = respuesta.html;
                     }
                 });
             } else {
-                $('#unidadMedidaList').html('');
+                const $unidadMedidaList = document.getElementById('unidadMedidaList');
+                $unidadMedidaList.innerHTML = "";
             }
         });
         const $txtMarca = document.getElementById('txtMarca');
         $txtMarca.addEventListener('keyup', function() {
             let descripcionMarca = this.value;
-            if (descripcionMarca != '') {
-                //console.log(descripcionMarca);
+            let url = "{{ route('marca.search', ':keywords') }}";
+            url = url.replace(':keywords', descripcionMarca);
+            if (this.value != '') {
                 $.ajax({
-                    url: '/primer_proyecto/marca/searchMarca',
-                    method: 'POST',
-                    data: {
-                        descripcionMarca
-                    },
-                    success: function(data) {
-                        //console.log(data);
+                    url: url,
+                    method: 'GET',
+                    success: function(respuesta) {
                         const $marcaList = document.getElementById('marcaList');
                         $marcaList.hidden = false;
-                        $marcaList.innerHTML = data;
+                        $marcaList.innerHTML = respuesta.html;
                     }
                 });
             } else {
-                $('#marcaList').html('');
+                const $marcaList = document.getElementById('marcaList');
+                $marcaList.innerHTML = "";
             }
         });
         const $txtCategoria = document.getElementById('txtCategoria');
         $txtCategoria.addEventListener('keyup', function() {
             let descripcionCategoria = this.value;
-            if (descripcionCategoria != '') {
-                //console.log(descripcionCategoria);
+            let url = "{{ route('categoria.search', ':keywords') }}";
+            url = url.replace(':keywords', descripcionCategoria);
+            if (this.value != '') {
                 $.ajax({
-                    url: '/primer_proyecto/categoria/searchCategoria',
-                    method: 'POST',
-                    data: {
-                        descripcionCategoria
-                    },
-                    success: function(data) {
-                        //console.log(data);
+                    url: url,
+                    method: 'GET',
+                    success: function(respuesta) {
                         const $categoriaList = document.getElementById(
                             'categoriaList');
                         $categoriaList.hidden = false;
-                        $categoriaList.innerHTML = data;
+                        $categoriaList.innerHTML = respuesta.html;
                     }
                 });
             } else {
-                $('#categoriaList').html('');
+                const $categoriaList = document.getElementById('categoriaList');
+                $categoriaList.innerHTML = "";
             }
         });
 
@@ -1277,6 +1282,7 @@
             vaciarCategoria();
         });
     }
+
     // Vaciar los seleccionados
     function vaciarListas() {
         vaciarUnidadMedida();
@@ -1335,6 +1341,39 @@
         document.getElementById('btnCambiarCategoria').hidden = false;
     }
     // ********   FIN - AUTOCOMPLETE SEARCH BARS   ********
+
+    function cerrarListaUnidadMedida(element) {
+        let $lista = document.getElementById('unidadMedidaList');
+        let $txtUnidadMedida = document.getElementById('txtUnidadMedida');
+        if (element != $lista && element != $txtUnidadMedida) {
+            $lista.innerHTML = "";
+        }
+    }
+
+    function cerrarListaMarca(element) {
+        let $lista = document.getElementById('marcaList');
+        let $txtMarca = document.getElementById('txtMarca');
+        if (element != $lista && element != $txtMarca) {
+            $lista.innerHTML = "";
+        }
+    }
+
+    function cerrarListaCategoria(element) {
+        let $lista = document.getElementById('categoriaList');
+        let $txtCategoria = document.getElementById('txtCategoria');
+        if (element != $lista && element != $txtCategoria) {
+            $lista.innerHTML = "";
+        }
+    }
+
+    document.addEventListener('click', function(event) {
+        if (document.querySelectorAll('.autocomplete-items').length != 0) {
+            cerrarListaUnidadMedida(event.target);
+            cerrarListaMarca(event.target);
+            cerrarListaCategoria(event.target);
+        }
+    });
+
 
     const vaciarPlantilla = function vaciarPlantilla() {
         while ($cuerpoCard.firstChild) {

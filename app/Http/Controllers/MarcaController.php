@@ -88,6 +88,20 @@ class MarcaController extends Controller
         //
     }
 
+    public function search($keywords)
+    {
+        if (strlen($keywords) != 0) {
+            $marcas = Marca::select(['codigo', 'descripcion'])
+                ->where('descripcion', 'like', '%' . $keywords . '%')
+                ->whereNull('deleted_at')
+                ->orderBy('descripcion')
+                ->take(10)->get();
+
+            $viewSearchMarcaRender = view('marca.search', compact('marcas'))->render();
+            return response()->json(array('html' => $viewSearchMarcaRender));
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

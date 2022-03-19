@@ -87,6 +87,20 @@ class CategoriaController extends Controller
         //
     }
 
+    public function search($keywords)
+    {
+        if (strlen($keywords) != 0) {
+            $categorias = Categoria::select(['codigo', 'descripcion'])
+                ->where('descripcion', 'like', '%' . $keywords . '%')
+                ->whereNull('deleted_at')
+                ->orderBy('descripcion')
+                ->take(10)->get();
+
+            $viewSearchCategoriaRender = view('categoria.search', compact('categorias'))->render();
+            return response()->json(array('html' => $viewSearchCategoriaRender));
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

@@ -1,4 +1,4 @@
-<form id="form" action="" method="post">
+<form id="form">
     <div id="modalBody" class="modal-body">
         <div id="filaError">
         </div>
@@ -42,9 +42,9 @@
                 <label for="txtUnidadMedida">Unidad de medida</label>
                 <input type="text" class="form-control" id="txtUnidadMedida" name="txtUnidadMedida"
                     placeholder="Buscar..."
-                    value="{{ $producto->unidad_medida_codigo . ' - ' . $producto->unidad_medida_descripcion }}"
+                    value="{{ $foraneo->unidad_medida_codigo . ' - ' . $foraneo->unidad_medida_descripcion }}"
                     readOnly>
-                <a href="#" id="btnCambiarUnidadMedida" class="btn btn-warning" hidden>Cambiar</a>
+                <a href="#" id="btnCambiarUnidadMedida" class="btn btn-warning cambiar-foraneo">Cambiar</a>
                 <span id="unidadMedidaList"></span>
             </div>
         </div>
@@ -52,15 +52,15 @@
             <div class="form-group col-md-6">
                 <label for="txtMarca">Marca</label>
                 <input type="text" class="form-control" id="txtMarca" name="txtMarca" placeholder="Buscar..."
-                    value="{{ $producto->marca_codigo . ' - ' . $producto->marca_descripcion }}" readOnly>
-                <a href="#" id="btnCambiarMarca" class="btn btn-warning" hidden>Cambiar</a>
+                    value="{{ $foraneo->marca_codigo . ' - ' . $foraneo->marca_descripcion }}" readOnly>
+                <a href="#" id="btnCambiarMarca" class="btn btn-warning cambiar-foraneo">Cambiar</a>
                 <span id="marcaList"></span>
             </div>
             <div class="form-group col-md-6">
                 <label for="txtCategoria">Categoría</label>
                 <input type="text" class="form-control" id="txtCategoria" name="txtCategoria" placeholder="Buscar..."
-                    value="{{ $producto->categoria_codigo . ' - ' . $producto->categoria_descripcion }}" readOnly>
-                <a href="#" id="btnCambiarCategoria" class="btn btn-warning" hidden>Cambiar</a>
+                    value="{{ $foraneo->categoria_codigo . ' - ' . $foraneo->categoria_descripcion }}" readOnly>
+                <a href="#" id="btnCambiarCategoria" class="btn btn-warning cambiar-foraneo">Cambiar</a>
                 <span id="categoriaList"></span>
             </div>
         </div>

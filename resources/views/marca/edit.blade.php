@@ -1,4 +1,4 @@
-<form id="form" action="" method="post">
+<form id="form">
     <div id="modalBody" class="modal-body">
         <div id="filaError">
         </div>

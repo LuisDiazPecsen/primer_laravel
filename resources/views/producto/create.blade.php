@@ -37,7 +37,7 @@
                 <label for="txtUnidadMedida">Unidad de medida</label>
                 <input type="text" class="form-control" id="txtUnidadMedida" name="txtUnidadMedida"
                     placeholder="Buscar...">
-                <a href="#" id="btnCambiarUnidadMedida" class="btn btn-warning" hidden>Cambiar</a>
+                <a href="#" id="btnCambiarUnidadMedida" class="btn btn-warning cambiar-foraneo" hidden>Cambiar</a>
                 <span id="unidadMedidaList"></span>
             </div>
         </div>
@@ -45,13 +45,13 @@
             <div class="form-group col-md-6">
                 <label for="txtMarca">Marca</label>
                 <input type="text" class="form-control" id="txtMarca" name="txtMarca" placeholder="Buscar...">
-                <a href="#" id="btnCambiarMarca" class="btn btn-warning" hidden>Cambiar</a>
+                <a href="#" id="btnCambiarMarca" class="btn btn-warning cambiar-foraneo" hidden>Cambiar</a>
                 <span id="marcaList"></span>
             </div>
             <div class="form-group col-md-6">
                 <label for="txtCategoria">Categoría</label>
                 <input type="text" class="form-control" id="txtCategoria" name="txtCategoria" placeholder="Buscar...">
-                <a href="#" id="btnCambiarCategoria" class="btn btn-warning" hidden>Cambiar</a>
+                <a href="#" id="btnCambiarCategoria" class="btn btn-warning cambiar-foraneo" hidden>Cambiar</a>
                 <span id="categoriaList"></span>
             </div>
         </div>

@@ -87,6 +87,20 @@ class UnidadMedidaController extends Controller
         //
     }
 
+    public function search($keywords)
+    {
+        if (strlen($keywords) != 0) {
+            $unidadesmedida = UnidadMedida::select(['codigo', 'descripcion'])
+                ->where('descripcion', 'like', '%' . $keywords . '%')
+                ->whereNull('deleted_at')
+                ->orderBy('descripcion')
+                ->take(10)->get();
+
+            $viewSearchUnidadMedidaRender = view('unidadmedida.search', compact('unidadesmedida'))->render();
+            return response()->json(array('html' => $viewSearchUnidadMedidaRender));
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
