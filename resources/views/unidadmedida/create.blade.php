@@ -11,7 +11,7 @@
             <div class="form-group col-md-12">
                 <label for="txtDescripcion">Descripción</label>
                 <input type="text" class="form-control" id="txtDescripcion" name="txtDescripcion"
-                    placeholder="Descripción">
+                    placeholder="Descripción" autofocus>
             </div>
         </div>
     </div>
