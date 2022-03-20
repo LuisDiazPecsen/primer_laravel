@@ -48,15 +48,11 @@
 
     // Revisa qué item de la SideBar debe activarse
     function activarSideBar() {
-        $btnSBUsuario.classList.remove('active');
         $btnSBProducto.classList.remove('active');
         $btnSBMarca.classList.remove('active');
         $btnSBCategoria.classList.remove('active');
         $btnSBUnidadMedida.classList.remove('active');
         switch (tipo) {
-            case 'usuarios':
-                $btnSBUsuario.classList.add('active');
-                break;
             case 'producto':
                 $btnSBProducto.classList.add('active');
                 break;
@@ -80,10 +76,6 @@
             case 'index':
                 $tituloPagina.innerHTML = 'Inicio';
                 $tituloCard.innerHTML = 'Inicio';
-                break;
-            case 'usuarios':
-                $tituloPagina.innerHTML = 'Panel de usuario';
-                $tituloCard.innerHTML = 'Panel de usuario';
                 break;
             case 'producto':
                 $tituloPagina.innerHTML = 'Productos';
@@ -238,176 +230,6 @@
             .appendTo('#' + tipo + '_table_wrapper .col-md-6:eq(0)');
     }
 
-    // Inicializa panel de usuario
-    const cambiarContrasenia = async function cambiarContrasenia() {
-        let form = new FormData(document.getElementById('formUser'));
-        try {
-            loading();
-            let options = {
-                    method: 'POST',
-                    body: form
-                },
-                response = await fetch('/primer_proyecto/users/update', options),
-                json = await response.json();
-            if (!response.ok) {
-                throw {
-                    status: response.status,
-                    statusText: response.statusText
-                };
-            }
-
-            console.log(json);
-            document.getElementById('txtPasswordAntigua').value = '';
-            document.getElementById('txtPasswordNueva').value = '';
-
-            // Código para mostrar resultado
-            const $divAlert = document.createElement('div');
-            if (json[0] == 'EXITO') {
-                $divAlert.setAttribute('class', 'alert alert-dismissible fade show alert-success');
-            } else {
-                $divAlert.setAttribute('class', 'alert alert-dismissible fade show alert-danger');
-            }
-            $divAlert.setAttribute('role', 'alert');
-            const $iconCheck = document.createElement('i');
-            if (json[0] == 'EXITO') {
-                $iconCheck.setAttribute('class', 'fas fa-check-circle');
-            } else {
-                $iconCheck.setAttribute('class', 'fas fa-exclamation-triangle');
-            }
-            const $mensaje = document.createTextNode(' ' + json[1]);
-            const $btnClose = document.createElement('button');
-            $btnClose.setAttribute('type', 'button');
-            $btnClose.setAttribute('class', 'close');
-            $btnClose.setAttribute('data-dismiss', 'alert');
-            $btnClose.setAttribute('aria-label', 'Close');
-            const $span = document.createElement('span');
-            $span.setAttribute('aria-hidden', 'true');
-            $span.innerHTML = "&times;";
-
-            $btnClose.appendChild($span);
-            $divAlert.appendChild($iconCheck);
-            $divAlert.appendChild($mensaje);
-            $divAlert.appendChild($btnClose);
-
-            // Mostrar alerta de éxito o de error en POST
-            $cuerpoCard.insertBefore($divAlert, document.getElementById('modal'));
-            setTimeout(() => {
-                $('.alertaResultado').alert('close');
-            }, 3000);
-
-            removeLoading();
-        } catch (error) {
-            let message = error.statusText || "Ocurrió un error";
-            $cuerpoCard.innerHTML = error;
-        }
-    }
-
-    const panelUsuario = async function panelUsuario() {
-        try {
-            loading();
-
-            let response = await fetch('/primer_proyecto/users/user');
-
-            titulo();
-            activarSideBar();
-            vaciarPlantilla();
-
-            if (!response.ok) {
-                throw {
-                    status: response.status,
-                    statusText: response.statusText
-                };
-            }
-
-            let json = await response.json();
-
-            const $formUsuario = document.createElement('form');
-            $formUsuario.setAttribute('id', 'formUser');
-
-            const $formGroup0 = document.createElement('div');
-            $formGroup0.setAttribute('id', 'filaErrorUser');
-
-            const $formGroup1 = document.createElement('div');
-            $formGroup1.setAttribute('class', 'form-group col-md-6');
-            const $label1 = document.createElement('label');
-            $label1.innerHTML = 'Nombre de usuario';
-            const $br1 = document.createElement('br');
-            const $username = document.createTextNode(json.username);
-            $formGroup1.appendChild($label1);
-            $formGroup1.appendChild($br1);
-            $formGroup1.appendChild($username);
-
-            const $formGroup2 = document.createElement('div');
-            $formGroup2.setAttribute('class', 'form-group col-md-6');
-            const $label2 = document.createElement('label');
-            $label2.setAttribute('for', 'txtPasswordAntigua');
-            $label2.innerHTML = 'Contraseña antigua';
-            const $inputPasswordAntigua = document.createElement('input');
-            $inputPasswordAntigua.setAttribute('type', 'password');
-            $inputPasswordAntigua.setAttribute('name', 'txtPasswordAntigua');
-            $inputPasswordAntigua.setAttribute('class', 'form-control');
-            $inputPasswordAntigua.setAttribute('id', 'txtPasswordAntigua');
-            $formGroup2.appendChild($label2);
-            $formGroup2.appendChild($inputPasswordAntigua);
-
-            const $formGroup3 = document.createElement('div');
-            $formGroup3.setAttribute('class', 'form-group col-md-6');
-            const $label3 = document.createElement('label');
-            $label3.setAttribute('for', 'txtPasswordNueva');
-            $label3.innerHTML = 'Nueva contraseña';
-            const $inputPasswordNueva = document.createElement('input');
-            $inputPasswordNueva.setAttribute('type', 'password');
-            $inputPasswordNueva.setAttribute('name', 'txtPasswordNueva');
-            $inputPasswordNueva.setAttribute('class', 'form-control');
-            $inputPasswordNueva.setAttribute('id', 'txtPasswordNueva');
-            $formGroup3.appendChild($label3);
-            $formGroup3.appendChild($inputPasswordNueva);
-
-            const $formGroup4 = document.createElement('div');
-            $formGroup4.setAttribute('class', 'form-group col-md-6');
-            const $aLogout = document.createElement('a');
-            $aLogout.setAttribute('href', '/primer_proyecto/users/logout');
-            $aLogout.setAttribute('type', 'button');
-            $aLogout.setAttribute('class', 'btn btn-danger');
-            $aLogout.style.marginRight = '10px';
-            $aLogout.innerHTML = 'Cerrar sesión';
-
-            const $btnSubmit = document.createElement('input');
-            $btnSubmit.setAttribute('id', 'btnActualizar');
-            $btnSubmit.setAttribute('type', 'submit');
-            $btnSubmit.setAttribute('class', 'btn btn-primary');
-            $btnSubmit.setAttribute('value', 'Cambiar contraseña');
-
-            $formGroup4.appendChild($aLogout);
-            $formGroup4.appendChild($btnSubmit);
-
-            $formUsuario.appendChild($formGroup0);
-            $formUsuario.appendChild($formGroup1);
-            $formUsuario.appendChild($formGroup2);
-            $formUsuario.appendChild($formGroup3);
-            /*$formUsuario.appendChild($aLogout);
-            $formUsuario.appendChild($inputSubmit);*/
-            $formUsuario.appendChild($formGroup4);
-
-            $cuerpoCard.appendChild($formUsuario);
-            $formUsuario.addEventListener('submit', function(event) {
-                event.preventDefault();
-                if (validarFormUsuario()) {
-                    cambiarContrasenia();
-                }
-            });
-
-            removeLoading();
-
-        } catch (error) {
-            let code = error.status;
-            let message = error.statusText || "Ocurrió un error";
-            $cuerpoCard.innerHTML = code + ' - ' + message;
-            removeLoading();
-        }
-
-    }
-
     // Agregar cargando
     const loading = function loading() {
         const $contenedorCarga = document.getElementById('contenedor_carga');
@@ -486,11 +308,6 @@
         $btnSBIindex.addEventListener('click', function() {
             tipo = 'index';
             index();
-        });
-        $btnSBUsuario.addEventListener('click', function() {
-            tipo = 'usuarios';
-            //vaciarPlantilla();
-            getPage();
         });
         $btnSBProducto.addEventListener('click', function() {
             tipo = 'producto';
@@ -1389,7 +1206,7 @@
             activarSideBar();
             vaciarPlantilla();
 
-            let response = await fetch('/prsfsdfimer_proyecto/index/about');
+            let response = await fetch("{{ route('about') }}");
 
             if (!response.ok) {
                 throw {
@@ -1399,7 +1216,7 @@
             }
 
             let json = await response.json();
-            const $lorem = document.createTextNode(json);
+            const $lorem = document.createTextNode(json.html);
             $cuerpoCard.appendChild($lorem);
 
             removeLoading();
@@ -1407,7 +1224,7 @@
         } catch (error) {
             let code = error.status;
             let message = error.statusText || "Ocurrió un error";
-            $cuerpoCard.innerHTML = code + ' - ' + message;
+            $cuerpoCard.innerHTML = code + ' - ' + message + error;
             removeLoading();
         }
     }

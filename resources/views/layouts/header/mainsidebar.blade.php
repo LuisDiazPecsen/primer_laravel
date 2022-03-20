@@ -15,12 +15,6 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a id="btnSBUsuario" type="button" class="nav-link">
-                        <i class="nav-icon far fa-user-circle"></i>
-                        <p>Usuario</p>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a id="btnSBProducto" type="button" class="nav-link">
                         <i class="nav-icon fas fa-box"></i>
                         <p>Productos</p>
@@ -53,10 +47,14 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="/primer_proyecto/users/logout" class="nav-link">
+                    <a href="{{ route('logout') }}" class="nav-link"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class='fas fa-sign-out-alt'></i>
                         <p>Cerrar sesión</p>
                     </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </li>
         </nav>
     </div>
