@@ -9,6 +9,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar d-flex align-content-between flex-wrap">
+
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
